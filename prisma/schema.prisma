@@ -1,0 +1,55 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  email String  @unique
+  name  String?
+}
+model UserTheme {
+  id        String  @id @default(auto())  @map("_id") @db.ObjectId
+  userUUID  String  @unique // Unique identifier per user
+  darkMode  Boolean @default(false) // User theme preference
+  createdAt DateTime @default(now()) // Timestamp when theme is created
+  updatedAt DateTime @updatedAt // Timestamp when theme is updated
+}
+
+
+model UserFilter {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  selectedFilter String @default("All")
+}
+model Product {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  category   String
+  price      String
+  currency   String
+  image      String
+  features   Feature[]
+}
+
+model Feature {
+  id        String  @id @default(auto())  @map("_id") @db.ObjectId
+  productId String  @db.ObjectId  
+  description String  
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id        String @id @default(auto())   @map("_id") @db.ObjectId
+  userUUID  String  // Unique user ID for persistence
+  productId String  // Unique product ID
+  name      String
+  category  String
+  price     String
+  currency  String
+  image     String
+  quantity  Int     // Quantity of product in cart
+}
