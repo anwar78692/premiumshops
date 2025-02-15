@@ -13,12 +13,14 @@ import {
 import { Delete } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useTheme } from "../context/ThemeContext";
-import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Close } from "@mui/icons-material";
 
 export default function CartDrawer({ open, onClose }) {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, clearCart } = useCart();
   const { darkMode } = useTheme();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [quantities, setQuantities] = useState({});
 
@@ -67,7 +69,7 @@ export default function CartDrawer({ open, onClose }) {
     loadRazorpay();
   }, []);
 
-  // ✅ Handle UPI Checkout
+  // ✅ Handle UPI Checkout & Remove Items on Success
   const handleUPICheckout = async () => {
     if (!razorpayLoaded) {
       toast.error("Razorpay is not loaded. Please try again.");
@@ -75,13 +77,17 @@ export default function CartDrawer({ open, onClose }) {
     }
 
     const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
-      amount: totalPriceINR * 100, // Amount in paisa
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: totalPriceINR * 100,
       currency: "INR",
       name: "Premium Shop",
       description: "Purchase from Premium Shop",
       handler: function (response) {
         toast.success("Payment Successful! Transaction ID: " + response.razorpay_payment_id);
+        
+        // ✅ Remove items from cart after successful payment
+        clearCart();
+        onClose();
       },
       prefill: {
         email: "customer@example.com",
@@ -96,13 +102,13 @@ export default function CartDrawer({ open, onClose }) {
     rzp.open();
   };
 
+  // ✅ Handle Crypto Checkout & Remove Items on Success
   const handleCryptoCheckout = async () => {
     setLoading(true);
     try {
-      const totalPrice = parseFloat(totalPriceUSD); // ✅ Convert to valid number
+      const totalPrice = parseFloat(totalPriceUSD);
   
       if (!totalPrice || totalPrice <= 0) {
-        console.error("Invalid total price:", totalPrice);
         toast.error("Invalid total amount");
         return;
       }
@@ -110,28 +116,31 @@ export default function CartDrawer({ open, onClose }) {
       const res = await fetch("/api/crypto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ totalAmount: totalPrice }), // ✅ Send valid amount
+        body: JSON.stringify({ totalAmount: totalPrice }),
       });
   
       const data = await res.json();
       
       if (data.invoice_url) {
-        window.location.href = data.invoice_url; // ✅ Redirect to NOWPayments invoice
+        window.location.href = data.invoice_url;
+        
+        // ✅ Remove items from cart after successful payment
+        clearCart();
+        onClose();
       } else {
         toast.error("Failed to create invoice. Try again.");
       }
     } catch (error) {
-      console.error("Crypto Payment Error:", error);
       toast.error("Crypto Payment Failed");
     }
     setLoading(false);
-  };  
+  };
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box
         sx={{
-          width: { xs: "100vw", sm: 400 }, // ✅ Responsive width
+          width: { xs: "100vw", sm: 400 },
           display: "flex",
           flexDirection: "column",
           height: "100vh",
@@ -150,9 +159,16 @@ export default function CartDrawer({ open, onClose }) {
           }}
         >
           <Typography variant="h6">Your Cart</Typography>
-          <IconButton onClick={onClose} sx={{ color: darkMode ? "#fff" : "#000" }}>
-            <Close />
-          </IconButton>
+          <div className="flex justify-end items-center">
+            {cartItems.length > 0 && (
+              <Button onClick={clearCart} sx={{ color: "red" }}>
+                Clear Cart
+              </Button>
+            )}
+            <IconButton onClick={onClose} sx={{ color: darkMode ? "#fff" : "#000" }}>
+              <Close />
+            </IconButton>
+          </div>
         </Box>
 
         <Divider />
@@ -160,7 +176,19 @@ export default function CartDrawer({ open, onClose }) {
         {/* Cart Items */}
         <Box sx={{ flexGrow: 1, overflowY: "auto", padding: 2 }}>
           {cartItems.length === 0 ? (
-            <Typography variant="body1">Your cart is empty</Typography>
+            <Box sx={{ textAlign: "center", padding: "20px" }}>
+              <Typography variant="body1">Your cart is empty</Typography>
+              <Button 
+                variant="contained" 
+                sx={{ marginTop: "10px" }} 
+                onClick={() => {
+                  router.push("/");
+                  onClose();
+                }}
+              >
+                Add Items to Cart
+              </Button>
+            </Box>
           ) : (
             cartItems.map((item) => (
               <Box key={item.id} sx={{ marginBottom: 2 }}>
@@ -180,12 +208,7 @@ export default function CartDrawer({ open, onClose }) {
                     <img
                       src={item.image}
                       alt={item.name}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        objectFit: "contain",
-                        borderRadius: "8px",
-                      }}
+                      style={{ width: 50, height: 50, objectFit: "contain", borderRadius: "8px" }}
                     />
                     <Box>
                       <Typography variant="body1" fontWeight="bold">
@@ -195,9 +218,8 @@ export default function CartDrawer({ open, onClose }) {
                         {item.price} | {item.currency}
                       </Typography>
                     </Box>
-                  </Box>
 
-                  {/* Quantity Selector & Delete Icon */}
+                  </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Select
                       value={quantities[item.id]}
@@ -224,24 +246,14 @@ export default function CartDrawer({ open, onClose }) {
 
         {/* Footer */}
         {cartItems.length > 0 && (
-          <Box
-            sx={{
-              padding: 2,
-              borderTop: "1px solid #ddd",
-              backgroundColor: darkMode ? "#181818" : "#fff",
-            }}
-          >
-            <div className="flex justify-between">
-            <Typography variant="h6">Total: ${totalPriceUSD}</Typography>
-            <Typography variant="body2" color="text.secondary">
-              ₹{totalPriceINR}
+          <Box sx={{ padding: 2 }}>
+            <Typography variant="h6" sx={{ textAlign: "center", marginBottom: "10px" }}>
+              Total: ${totalPriceUSD} | ₹{totalPriceINR}
             </Typography>
-            </div>
-          
-            <Button fullWidth sx={{marginBottom:"10px"}} variant="contained" onClick={handleUPICheckout} className="mb-5">
+            <Button fullWidth variant="contained" onClick={handleUPICheckout} sx={{ marginBottom: "10px" }}>
               Pay via UPI (₹)
             </Button>
-            <Button fullWidth variant="contained" color="secondary"  onClick={handleCryptoCheckout}>
+            <Button fullWidth variant="contained" color="secondary" onClick={handleCryptoCheckout}>
               Pay via Crypto ($)
             </Button>
           </Box>

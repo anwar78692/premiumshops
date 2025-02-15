@@ -56,23 +56,39 @@ export async function POST(req) {
   }
 }
 
-// 📌 Remove Product from Cart
 export async function DELETE(req) {
     try {
-      const { uuid, id } = await req.json();
-  
-      if (!uuid || !id) {
-        return NextResponse.json({ error: "UUID and Product ID are required" }, { status: 400 });
-      }
-  
-      await prisma.cart.deleteMany({
-        where: { userUUID: uuid, id },
-      });
-  
-      return NextResponse.json({ message: "Product removed successfully" });
+        const body = await req.json(); // ✅ Parse request body once
+
+        const { uuid, clearAll, id } = body; // ✅ Extract all needed fields
+
+        if (!uuid) {
+            return NextResponse.json({ error: "UUID is required" }, { status: 400 });
+        }
+
+        if (clearAll) {
+            // ✅ Clear all items for the user
+            await prisma.cart.deleteMany({
+                where: { userUUID: uuid },
+            });
+
+            return NextResponse.json({ message: "All cart items removed successfully" });
+        }
+
+        if (!id) {
+            return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+        }
+
+        // ✅ Remove a specific item from the cart
+        await prisma.cart.deleteMany({
+            where: { userUUID: uuid, productId: id },
+        });
+
+        return NextResponse.json({ message: "Product removed successfully" });
     } catch (error) {
-      console.error("Error removing product from cart:", error);
-      return NextResponse.json({ error: "Failed to remove product" }, { status: 500 });
+        console.error("Error removing cart items:", error);
+        return NextResponse.json({ error: "Failed to remove cart items" }, { status: 500 });
     }
-  }
+}
+
   

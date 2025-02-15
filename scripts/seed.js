@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("🗑 Cleaning up old features...");
-  
+
   // ✅ **STEP 1: Delete ALL Features Before Re-Seeding**
   await prisma.feature.deleteMany({}); // This removes duplicates before inserting new ones
 
@@ -36,25 +36,238 @@ async function main() {
     { name: "Notion Plus", category: "Productivity", price: "$8", currency: "₹650", image: "/products/notion.png", billingCycle: "Monthly" },
     { name: "Evernote Pro", category: "Productivity", price: "$10", currency: "₹800", image: "/products/evernote.png", billingCycle: "Yearly" },
     { name: "Figma Pro", category: "Design", price: "$15", currency: "₹1200", image: "/products/figma.png", billingCycle: "Monthly" },
+    { name: "EDX Pro", category: "Learning", price: "$15", currency: "₹1200", image: "/products/edx.png", billingCycle: "Yearly" },
+    { name: "Zoom Pro", category: "Professional", price: "$50", currency: "₹4500", image: "/products/zoom.png", billingCycle: "Yearly" },
+    { name: "Youtube Premium", category: "Entertainment", price: "$10", currency: "₹900", image: "/products/youtube.png", billingCycle: "Yearly" },
+    { name: "Youtube Premium", category: "Entertainment", price: "$3", currency: "₹200", image: "/products/youtube.png", billingCycle: "3 Months" },
+    { name: "Arike Dating", category: "Dating", price: "$12", currency: "₹850", image: "/products/arike.png", billingCycle: "3 Months" },
+    { name: "Arike Dating", category: "Dating", price: "$25", currency: "₹2000", image: "/products/arike.png", billingCycle: "6 Months" },
+    { name: "Pure Dating", category: "Dating", price: "$25", currency: "₹2000", image: "/products/pure.png", billingCycle: "Monthly" },
+    { name: "Pure Dating", category: "Dating", price: "$25", currency: "₹2000", image: "/products/pure.png", billingCycle: "Monthly" },
+    { name: "Mega Pro", category: "Utilities", price: "$4", currency: "₹249", image: "/products/mega.png", billingCycle: "Monthly" },
+    { name: "Datacamp", category: "Learning", price: "$8", currency: "₹899", image: "/products/datacamp.png", billingCycle: "3 Months" },
+    { name: "Datacamp", category: "Learning", price: "$16", currency: "₹1499", image: "/products/datacamp.png", billingCycle: "6 Months" },
+    { name: "Zee5 Premium", category: "Entertainment", price: "$8", currency: "₹400", image: "/products/zee5.png", billingCycle: "Yearly" },
+    { name: "JioHotstar Premium", category: "Entertainment", price: "$14", currency: "₹1199", image: "/products/hotstar.png", billingCycle: "Yearly" },
+
   ];
-  
+
 
   // ✅ Features for Each Product (Now Unique!)
   const features = [
+    // LinkedIn Premium Business
     { productName: "LinkedIn Premium Business", description: "Access exclusive job insights" },
     { productName: "LinkedIn Premium Business", description: "InMail messaging available" },
     { productName: "LinkedIn Premium Business", description: "See who viewed your profile" },
     { productName: "LinkedIn Premium Business", description: "Exclusive learning courses" },
 
+    // LinkedIn Premium Career
+    { productName: "LinkedIn Premium Career", description: "Job application insights" },
+    { productName: "LinkedIn Premium Career", description: "Resume builder and tips" },
+    { productName: "LinkedIn Premium Career", description: "Access to LinkedIn Learning" },
+    { productName: "LinkedIn Premium Career", description: "Profile optimization tools" },
+
+    // AlgoExpert
     { productName: "AlgoExpert", description: "Comprehensive coding interview prep" },
     { productName: "AlgoExpert", description: "100+ data structures and algorithms problems" },
     { productName: "AlgoExpert", description: "Mock coding interviews available" },
     { productName: "AlgoExpert", description: "Video solutions for all problems" },
 
+    // Programming Expert
+    { productName: "Programming Expert", description: "In-depth programming tutorials" },
+    { productName: "Programming Expert", description: "Interactive coding challenges" },
+    { productName: "Programming Expert", description: "Community support and forums" },
+    { productName: "Programming Expert", description: "Project-based learning" },
+
+    // Blinkist
+    { productName: "Blinkist", description: "Summaries of best-selling books" },
+    { productName: "Blinkist", description: "Audio versions for on-the-go learning" },
+    { productName: "Blinkist", description: "Personalized recommendations" },
+    { productName: "Blinkist", description: "Offline access to content" },
+
+    // SmallPDF
+    { productName: "SmallPDF", description: "Convert PDF to various formats" },
+    { productName: "SmallPDF", description: "Merge, split, and compress PDFs" },
+    { productName: "SmallPDF", description: "Online PDF editor" },
+    { productName: "SmallPDF", description: "Secure PDF handling" },
+
+    // iLovePDF
+    { productName: "iLovePDF", description: "PDF compression and optimization" },
+    { productName: "iLovePDF", description: "PDF to Word, Excel, and other formats" },
+    { productName: "iLovePDF", description: "PDF merging and splitting" },
+    { productName: "iLovePDF", description: "Online PDF tools" },
+
+    // Beautiful AI
+    { productName: "Beautiful AI", description: "AI-powered presentation design" },
+    { productName: "Beautiful AI", description: "Smart templates for various industries" },
+    { productName: "Beautiful AI", description: "Collaborative editing" },
+    { productName: "Beautiful AI", description: "Export to multiple formats" },
+
+    // Coursera Plus
+    { productName: "Coursera Plus", description: "Unlimited access to courses" },
+    { productName: "Coursera Plus", description: "Certificates for completed courses" },
+    { productName: "Coursera Plus", description: "Specializations and professional certificates" },
+    { productName: "Coursera Plus", description: "Guided projects for hands-on learning" },
+
+    // ChatGPT Plus
     { productName: "ChatGPT Plus", description: "Faster AI responses" },
     { productName: "ChatGPT Plus", description: "Access to GPT-4 Turbo" },
     { productName: "ChatGPT Plus", description: "Priority access during peak times" },
     { productName: "ChatGPT Plus", description: "Better performance on complex queries" },
+
+    // Claude AI
+    { productName: "Claude AI", description: "Advanced natural language processing" },
+    { productName: "Claude AI", description: "Contextual understanding" },
+    { productName: "Claude AI", description: "Customizable AI responses" },
+    { productName: "Claude AI", description: "Integration with various platforms" },
+
+    // Perplexity AI
+    { productName: "Perplexity AI", description: "AI-driven insights and analytics" },
+    { productName: "Perplexity AI", description: "Real-time data analysis" },
+    { productName: "Perplexity AI", description: "Predictive modeling" },
+    { productName: "Perplexity AI", description: "Customizable dashboards" },
+
+    // Canva Pro
+    { productName: "Canva Pro", description: "Access to premium design elements" },
+    { productName: "Canva Pro", description: "Brand kit for consistent branding" },
+    { productName: "Canva Pro", description: "Team collaboration features" },
+    { productName: "Canva Pro", description: "Magic Resize for multiple formats" },
+
+    // Adobe Creative Cloud
+    { productName: "Adobe Creative Cloud", description: "Access to Adobe's suite of creative tools" },
+    { productName: "Adobe Creative Cloud", description: "Cloud storage for projects" },
+    { productName: "Adobe Creative Cloud", description: "Regular updates and new features" },
+    { productName: "Adobe Creative Cloud", description: "Integration with Adobe Stock" },
+
+    // Autodesk All Apps
+    { productName: "Autodesk All Apps", description: "Access to all Autodesk design software" },
+    { productName: "Autodesk All Apps", description: "Cloud-based collaboration" },
+    { productName: "Autodesk All Apps", description: "3D modeling and rendering tools" },
+    { productName: "Autodesk All Apps", description: "Industry-specific solutions" },
+
+    // Netflix Premium
+    { productName: "Netflix Premium", description: "Ultra HD streaming" },
+    { productName: "Netflix Premium", description: "Multiple screens at once" },
+    { productName: "Netflix Premium", description: "Download content for offline viewing" },
+    { productName: "Netflix Premium", description: "Ad-free experience" },
+
+    // Spotify Premium
+    { productName: "Spotify Premium", description: "Ad-free music listening" },
+    { productName: "Spotify Premium", description: "Offline playback" },
+    { productName: "Spotify Premium", description: "High-quality audio streaming" },
+    { productName: "Spotify Premium", description: "Unlimited skips" },
+
+    // Amazon Prime
+    { productName: "Amazon Prime", description: "Free two-day shipping" },
+    { productName: "Amazon Prime", description: "Access to Prime Video" },
+    { productName: "Amazon Prime", description: "Prime Music streaming" },
+    { productName: "Amazon Prime", description: "Exclusive deals and discounts" },
+
+    // Grammarly Premium
+    { productName: "Grammarly Premium", description: "Advanced grammar and style checks" },
+    { productName: "Grammarly Premium", description: "Plagiarism detection" },
+    { productName: "Grammarly Premium", description: "Vocabulary enhancement suggestions" },
+    { productName: "Grammarly Premium", description: "Integration with multiple platforms" },
+
+    // Dropbox Pro
+    { productName: "Dropbox Pro", description: "1TB of storage space" },
+    { productName: "Dropbox Pro", description: "Advanced sharing and collaboration" },
+    { productName: "Dropbox Pro", description: "Priority support" },
+    { productName: "Dropbox Pro", description: "Offline access to files" },
+
+    // Google Workspace
+    { productName: "Google Workspace", description: "Professional email with your domain" },
+    { productName: "Google Workspace", description: "Collaborative tools like Docs, Sheets, and Slides" },
+    { productName: "Google Workspace", description: "Cloud storage with Google Drive" },
+    { productName: "Google Workspace", description: "Video conferencing with Meet" },
+
+    // Notion Plus
+    { productName: "Notion Plus", description: "Unlimited blocks for pages" },
+    { productName: "Notion Plus", description: "Advanced permissions and sharing" },
+    { productName: "Notion Plus", description: "Version history and recovery" },
+    { productName: "Notion Plus", description: "API access for custom integrations" },
+
+    // Evernote Pro
+    { productName: "Evernote Pro", description: "Offline access to notes" },
+    { productName: "Evernote Pro", description: "Advanced search capabilities" },
+    { productName: "Evernote Pro", description: "Integration with third-party apps" },
+    { productName: "Evernote Pro", description: "Notebooks with more than 250 notes" },
+
+    // Figma Pro
+    { productName: "Figma Pro", description: "Unlimited projects and files" },
+    { productName: "Figma Pro", description: "Advanced prototyping features" },
+    { productName: "Figma Pro", description: "Team libraries for design consistency" },
+    { productName: "Figma Pro", description: "Version history and branching" },
+
+    // EDX Pro
+    { productName: "EDX Pro", description: "Access to professional education courses" },
+    { productName: "EDX Pro", description: "Verified certificates for completed courses" },
+    { productName: "EDX Pro", description: "MicroMasters and Professional Certificate programs" },
+
+    { productName: "Zoom Pro", description: "Host unlimited meetings" },
+    { productName: "Zoom Pro", description: "Up to 100 participants" },
+    { productName: "Zoom Pro", description: "Cloud recording available" },
+    { productName: "Zoom Pro", description: "Enhanced security features" },
+
+    // YouTube Premium (Yearly)
+    { productName: "Youtube Premium", description: "Ad-free videos" },
+    { productName: "Youtube Premium", description: "Background play" },
+    { productName: "Youtube Premium", description: "Offline downloads" },
+    { productName: "Youtube Premium", description: "Access to YouTube Music" },
+
+    // YouTube Premium (3 Months)
+    { productName: "Youtube Premium", description: "Same benefits as yearly plan" },
+    { productName: "Youtube Premium", description: "Limited-time discounted plan" },
+    { productName: "Youtube Premium", description: "No interruptions while watching" },
+    { productName: "Youtube Premium", description: "Exclusive content access" },
+
+    // Arike Dating (3 Months)
+    { productName: "Arike Dating", description: "Unlimited likes & matches" },
+    { productName: "Arike Dating", description: "Priority message placement" },
+    { productName: "Arike Dating", description: "See who viewed your profile" },
+    { productName: "Arike Dating", description: "Exclusive profile boost feature" },
+
+    // Arike Dating (6 Months)
+    { productName: "Arike Dating", description: "Same benefits as 3-month plan" },
+    { productName: "Arike Dating", description: "Discounted long-term plan" },
+    { productName: "Arike Dating", description: "More visibility in match suggestions" },
+    { productName: "Arike Dating", description: "Advanced match filtering" },
+
+    // Pure Dating (Monthly)
+    { productName: "Pure Dating", description: "No ads while swiping" },
+    { productName: "Pure Dating", description: "Instant chat with new matches" },
+    { productName: "Pure Dating", description: "Enhanced privacy mode" },
+    { productName: "Pure Dating", description: "Verified user profiles" },
+
+    // Mega Pro
+    { productName: "Mega Pro", description: "Up to 200GB cloud storage" },
+    { productName: "Mega Pro", description: "Encrypted secure storage" },
+    { productName: "Mega Pro", description: "Fast file sharing & downloads" },
+    { productName: "Mega Pro", description: "Collaboration tools included" },
+
+    // DataCamp (3 Months)
+    { productName: "Datacamp", description: "Full access to all courses" },
+    { productName: "Datacamp", description: "Interactive coding exercises" },
+    { productName: "Datacamp", description: "Track progress with quizzes" },
+    { productName: "Datacamp", description: "Industry-recognized certificates" },
+
+    // DataCamp (6 Months)
+    { productName: "Datacamp", description: "Same benefits as 3-month plan" },
+    { productName: "Datacamp", description: "Extended learning access" },
+    { productName: "Datacamp", description: "More advanced career tracks" },
+    { productName: "Datacamp", description: "Live mentoring sessions" },
+
+    { productName: "Zee5 Premium", description: "Ad-free streaming experience" },
+    { productName: "Zee5 Premium", description: "Access to exclusive original series" },
+    { productName: "Zee5 Premium", description: "Watch premium movies & TV shows" },
+    { productName: "Zee5 Premium", description: "Supports multiple devices & offline viewing" },
+
+    // JioHotstar Premium
+    { productName: "JioHotstar Premium", description: "Live sports streaming (Cricket, Football, etc.)" },
+    { productName: "JioHotstar Premium", description: "Ad-free experience for premium content" },
+    { productName: "JioHotstar Premium", description: "Exclusive Disney+ & Marvel content" },
+    { productName: "JioHotstar Premium", description: "Supports UHD & Dolby Atmos sound" },
+
   ];
 
   // ✅ Insert Products into Database (Upsert to Avoid Duplicates)

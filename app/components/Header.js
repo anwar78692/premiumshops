@@ -4,11 +4,11 @@ import { useTheme } from "../context/ThemeContext";
 import { useCart } from "../context/CartContext";
 import CartDrawer from "./CartDrawer";
 import { useState } from "react";
+import { Tooltip } from "@mui/material";
 
 export default function Header() {
   const { darkMode, toggleDarkMode } = useTheme();
-  const { cartItems } = useCart();
-  const [cartOpen, setCartOpen] = useState(false);
+  const { cartItems, cartOpen, handleOpenCart,handleCloseCart } = useCart();
 
   return (
     <header className={`flex items-center justify-between px-6 py-4  ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
@@ -16,7 +16,7 @@ export default function Header() {
       <h1 className="text-2xl font-bold tracking-wide">Premium shop</h1>
 
       {/* Icons Section */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2">
         {/* Dark Mode Toggle */}
         <button
           onClick={toggleDarkMode}
@@ -27,7 +27,10 @@ export default function Header() {
 
         {/* Shopping Cart */}
         <div className="relative">
-          <ShoppingCart size={28} className="cursor-pointer hover:text-blue-500" onClick={() => setCartOpen(true)} />
+            <Tooltip title="View cart" placement="bottom" arrow >
+
+          <ShoppingCart size={28} className="cursor-pointer hover:text-blue-500" onClick={handleOpenCart} />
+            </Tooltip>
           {cartItems.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-blue-600 text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">
               {cartItems.length}
@@ -35,7 +38,7 @@ export default function Header() {
           )}
         </div>
       </div>
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <CartDrawer open={cartOpen} onClose={handleCloseCart} />
     </header>
   );
 }

@@ -4,7 +4,6 @@ import axios from "axios";
 export async function POST(req) {
   try {
     const { totalAmount } = await req.json();
-    console.log("Total amount received:", totalAmount);
 
     // ✅ Ensure totalAmount is a valid price
     if (!totalAmount || isNaN(totalAmount) || totalAmount <= 0) {
@@ -13,7 +12,6 @@ export async function POST(req) {
 
     // ✅ Fetch API Key from environment variables
     const API_KEY = process.env.NEXT_PUBLIC_NOWPAYMENTS_API_KEY;
-    console.log("Using API Key:", API_KEY);
 
     if (!API_KEY) {
       return NextResponse.json({ error: "API Key missing" }, { status: 500 });

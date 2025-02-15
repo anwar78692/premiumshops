@@ -6,6 +6,9 @@ const CartContext = createContext({
   cartItems: [],
   addToCart: () => {},
   removeFromCart: () => {},
+  clearCart: () => {}, 
+  handleOpenCart: () => {}, 
+  handleCloseCart: () => {}, 
 });
 
 export const useCart = () => useContext(CartContext);
@@ -13,6 +16,14 @@ export const useCart = () => useContext(CartContext);
 export default function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [userUUID, setUserUUID] = useState(null);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const handleOpenCart=() => {
+    setCartOpen(true);
+  }
+  const handleCloseCart=() => {
+    setCartOpen(false);
+  }
 
   // Generate and store UUID if not available
   useEffect(() => {
@@ -76,7 +87,7 @@ export default function CartProvider({ children }) {
       const res = await fetch("/api/cart", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uuid: userUUID, id }),
+        body: JSON.stringify({ uuid: userUUID, id,clearAll:false }),
       });
       if (!res.ok) throw new Error("Failed to remove item from cart");
       setCartItems((prev) => prev.filter((item) => item.id !== id));
@@ -85,9 +96,24 @@ export default function CartProvider({ children }) {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uuid: userUUID, clearAll: true }),
+      });
+      
+      if (!res.ok) throw new Error("Failed to clear cart");
+
+      setCartItems([]); 
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
+  };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart,clearCart,cartOpen, handleOpenCart,handleCloseCart }}>
       {children}
     </CartContext.Provider>
   );

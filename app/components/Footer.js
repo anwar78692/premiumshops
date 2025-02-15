@@ -2,14 +2,17 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "../context/ThemeContext";
+import { useMediaQuery } from "@mui/material";
 
 export default function Footer() {
   const { darkMode } = useTheme();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   return (
     <Box
       sx={{
         display: "flex",
+        flexDirection: isMobile ? "column" : "row", // Block on mobile, row on desktop
         justifyContent: "space-between",
         alignItems: "center",
         padding: "16px",
@@ -19,15 +22,21 @@ export default function Footer() {
         position: "relative",
         bottom: 0,
         width: "100%",
-        marginTop:"20px"
+        marginTop: "20px",
+        textAlign: isMobile ? "center" : "left", // Center align for mobile
       }}
     >
-      <Typography variant="body2">Copyright © Premium Shop 2025</Typography>
+      <Typography variant="body2" sx={{ marginBottom: isMobile ? "10px" : 0 }}>
+        Copyright © Premium Shop 2025
+      </Typography>
       <Button
         variant="text"
         color="primary"
         onClick={() => window.open("https://t.me/PBG_1BOT", "_blank")}
-        sx={{ textTransform: "none", fontWeight: "bold" }}
+        sx={{
+          textTransform: "none",
+          fontWeight: "bold",
+        }}
       >
         Contact Us on Telegram
       </Button>

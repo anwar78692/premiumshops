@@ -1,79 +1,112 @@
 "use client";
 
-import { Button, useMediaQuery, Box, Typography } from "@mui/material";
+import { Button, useMediaQuery, Box, Typography, Paper, Select, MenuItem } from "@mui/material";
 import { Filter } from "lucide-react";
 import { useFilter } from "../context/FilterContext";
 import { useTheme } from "../context/ThemeContext";
+import React from "react";
 
-const filters = ["All", "Learning", "AI", "Professional", "Design", "Entertainment", "Utilities"];
+const filters = ["All", "Learning", "AI", "Professional", "Productivity", "Design", "Entertainment", "Utilities", "Dating"];
+const billingCycles = ["All", "Monthly", "Yearly", "3 Months", "6 Months"];
 
 export default function FilterComponent() {
   const { selectedFilter, setSelectedFilter } = useFilter();
   const { darkMode } = useTheme();
   const isMobile = useMediaQuery("(max-width: 640px)"); // ✅ Detects mobile screens
+  const [selectedBilling, setSelectedBilling] = React.useState("All");
 
   return (
-    <Box
+    <Paper
+      elevation={3}
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 2,
-        padding: "12px",
-        width: "100%",
-        borderRadius: "8px",
+        justifyContent: "space-between",
+        paddingLeft: "20px",
+        paddingRight: "25px",
         overflowX: "auto",
-        backgroundColor: darkMode ? "#121212" : "#F3F4F6",
-        color: darkMode ? "#FFFFFF" : "#000000",
+        background: "transparent",
+        boxShadow: "none",
+        color: darkMode ? "#FFFFFF" : "#111827",
+
       }}
     >
-      {/* ✅ Fix: Ensure Filter icon is visible */}
-      <Box sx={{ display: "flex", alignItems: "center", color: "inherit" }}>
-        <Filter size={22} />
+      {/* Left Section - Filter Title & Icon */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Filter size={22} />
+        
+            <Typography variant="body1" sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+              Filter by:
+            </Typography>
+          
+        </Box>
       </Box>
 
-      {/* ✅ Show only on larger screens */}
-      {!isMobile && (
-        <Typography variant="body1" sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-          Filter by:
-        </Typography>
-      )}
-
-      <Box sx={{ display: "flex", gap: 1 }}>
-        {filters.map((filter) => (
-          <Button
-            key={filter}
-            variant={selectedFilter === filter ? "contained" : "outlined"}
-            color={selectedFilter === filter ? "primary" : "default"}
-            onClick={() => setSelectedFilter(filter)}
-            sx={{
-              borderRadius: "24px",
-              textTransform: "none",
-              padding: "6px 16px",
-              minWidth: "80px",
-              backgroundColor: selectedFilter === filter
-                ? darkMode
-                  ? "#1E40AF" // Dark mode active color
-                  : "#3B82F6" // Light mode active color
-                : "transparent",
-              color: selectedFilter === filter ? "#fff" : darkMode ? "#D1D5DB" : "#374151",
-              borderColor: selectedFilter === filter
-                ? "transparent"
-                : darkMode
-                ? "#4B5563"
-                : "#D1D5DB",
-              "&:hover": {
+      {/* Filter Buttons */}
+      <Box sx={{ display: "flex", gap: 1, overflowX: "auto" }}>
+      {isMobile ? (
+        <Select
+          value={selectedFilter}
+          onChange={(e) => setSelectedFilter(e.target.value)}
+          variant="outlined"
+          size="small"
+          sx={{
+            minWidth: "150px",
+            fontSize: "14px",
+            backgroundColor: darkMode ? "#1E1E1E" : "#fff",
+            color: darkMode ? "#E5E7EB" : "#000",
+            borderRadius: "8px",
+          }}
+        >
+          {filters.map((filter) => (
+            <MenuItem key={filter} value={filter}>
+              {filter}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        // 🔹 Desktop View: Filter Buttons
+        <Box sx={{ display: "flex", gap: 1, overflowX: "auto" }}>
+          {filters.map((filter) => (
+            <Button
+              key={filter}
+              variant={selectedFilter === filter ? "contained" : "outlined"}
+              onClick={() => setSelectedFilter(filter)}
+              sx={{
+                borderRadius: "24px",
+                textTransform: "none",
+                padding: "6px 14px",
+                minWidth: "80px",
+                fontSize: "14px",
+                whiteSpace: "nowrap",
                 backgroundColor: selectedFilter === filter
                   ? darkMode
-                    ? "#1E3A8A"
-                    : "#2563EB"
+                    ? "#2563EB"
+                    : "#3B82F6"
                   : "transparent",
-              },
-            }}
-          >
-            {filter}
-          </Button>
-        ))}
+                color: selectedFilter === filter
+                  ? "#fff"
+                  : darkMode
+                  ? "#E5E7EB"
+                  : "#374151",
+                border: selectedFilter === filter ? "none" : `1px solid ${darkMode ? "#4B5563" : "#D1D5DB"}`,
+                "&:hover": {
+                  backgroundColor: selectedFilter === filter
+                    ? darkMode
+                      ? "#1E3A8A"
+                      : "#2563EB"
+                    : "rgba(0,0,0,0.05)",
+                },
+                transition: "all 0.3s ease-in-out",
+              }}
+            >
+              {filter}
+            </Button>
+          ))}
+        </Box>
+      )}
       </Box>
-    </Box>
+    </Paper>
   );
 }

@@ -12,6 +12,7 @@ import {
   ListItemText,
   Button,
   CircularProgress,
+  useMediaQuery
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { CheckCircle, ShoppingCart } from "lucide-react";
@@ -22,6 +23,7 @@ export default function ProductDrawer({ open, productId, onClose }) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const { addToCart } = useCart();
+  const isMobile = useMediaQuery("(max-width: 600px)"); // ✅ Detects mobile screens
 
   useEffect(() => {
     if (!productId || !open) return;
@@ -68,15 +70,27 @@ export default function ProductDrawer({ open, productId, onClose }) {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 350, padding: 2, display: "flex", flexDirection: "column", height: "100vh" }}>
-        {/* Header */}
+      <Box
+        sx={{
+          width: isMobile ? "100vw" : 350, // ✅ Full width on mobile
+          padding: 2,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          backgroundColor: "#1E1E1E",
+          color: "#fff",
+          overflowY: "auto", // ✅ Enables scrolling
+          scrollbarWidth: "thin",
+        }}
+      >
+        {/* ✅ Header Section */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6">Product Details</Typography>
-          <IconButton onClick={onClose}>
+          <Typography variant="h6" sx={{ fontSize: isMobile ? "16px" : "18px" }}>Product Details</Typography>
+          <IconButton onClick={onClose} sx={{ color: "#fff" }}>
             <Close />
           </IconButton>
         </Box>
-        <Divider sx={{ marginY: 1 }} />
+        <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
 
         {/* ✅ Show Loader if Loading */}
         {loading ? (
@@ -85,34 +99,40 @@ export default function ProductDrawer({ open, productId, onClose }) {
           </Box>
         ) : product ? (
           <>
-            {/* ✅ Small Product Image */}
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+            {/* ✅ Product Image */}
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 , mt:2 }}>
               <img
                 src={product.image}
                 alt={product.name}
-                style={{ width: "120px", height: "120px", borderRadius: "10px", objectFit: "contain" }}
+                style={{
+                  width: isMobile ? "90%" : "80%", // ✅ Adjusts for mobile
+                  maxWidth: "300px",
+                  height: "auto",
+                  borderRadius: "12px",
+                  objectFit: "contain",
+                }}
               />
             </Box>
 
             {/* ✅ Product Name & Category */}
-            <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold" }}>
+            <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", fontSize: isMobile ? "18px" : "20px" }}>
               {product.name}
             </Typography>
-            <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
+            <Typography variant="body2" sx={{ textAlign: "center", color: "gray", fontSize: isMobile ? "14px" : "16px" }}>
               {product.category}
             </Typography>
 
-            <Divider sx={{ marginY: 1 }} />
+            <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
 
-            {/* ✅ Features List (Reduced Spacing) */}
+            {/* ✅ Features List */}
             <List sx={{ paddingY: 0 }}>
               {product.features?.length > 0 ? (
                 product.features.map((feature, index) => (
-                  <ListItem key={index} sx={{ paddingY: "2px" }}> {/* Reduced Padding */}
+                  <ListItem key={index} sx={{ paddingY: "4px" }}> {/* ✅ Reduced Padding */}
                     <ListItemIcon sx={{ minWidth: "30px" }}>
                       <CheckCircle size={18} color="green" />
                     </ListItemIcon>
-                    <ListItemText primary={feature.description} sx={{ fontSize: "14px" }} />
+                    <ListItemText primary={feature.description} sx={{ fontSize: "14px", color: "#fff" }} />
                   </ListItem>
                 ))
               ) : (
@@ -122,11 +142,11 @@ export default function ProductDrawer({ open, productId, onClose }) {
               )}
             </List>
 
-            <Divider sx={{ marginY: 1 }} />
+            <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
 
             {/* ✅ Price & Add to Cart Button */}
             <Box sx={{ textAlign: "center", mt: "auto" }}>
-              <Typography variant="h6">
+              <Typography variant="h6" sx={{ fontSize: isMobile ? "16px" : "18px" }}>
                 {product.price} | {product.currency}
               </Typography>
               <Button
@@ -135,7 +155,7 @@ export default function ProductDrawer({ open, productId, onClose }) {
                 fullWidth
                 startIcon={<ShoppingCart />}
                 onClick={() => handleAddToCart(product)}
-                sx={{ mt: 1 }}
+                sx={{ mt: 1, fontSize: isMobile ? "14px" : "16px" }} // ✅ Adjust button text size
               >
                 Add to Cart
               </Button>

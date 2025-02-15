@@ -57,7 +57,7 @@ model Cart {
 
 model Visit {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  ipAddress String
+  ipAddress String @unique
   userAgent String?
   visitedAt DateTime @default(now())
 }
