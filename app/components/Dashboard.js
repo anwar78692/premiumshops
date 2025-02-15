@@ -9,6 +9,8 @@ import {
   Grid,
   Typography,
   TextField,
+  CircularProgress,
+  Chip,
 } from "@mui/material";
 import Header from "./Header";
 import { useTheme } from "../context/ThemeContext";
@@ -31,6 +33,7 @@ export default function Dashboard() {
   const [customPrices, setCustomPrices] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleOpenDrawer = (product) => {
     console.log("Open drawer: " , product);
@@ -43,16 +46,19 @@ export default function Dashboard() {
     setIsDrawerOpen(false);
   };
 
-
-  // Fetch Products from API
   useEffect(() => {
     async function fetchProducts() {
       try {
+        setLoading(true); // ✅
         const res = await fetch("/api/products");
         const data = await res.json();
+        console.log("Product: " , data);
+        
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false); // ✅ Stop loading after fetch
       }
     }
     fetchProducts();
@@ -77,6 +83,16 @@ export default function Dashboard() {
         ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
         : true
     );
+    useEffect(() => {
+        async function trackVisit() {
+          try {
+            await fetch("/api/track");
+          } catch (error) {
+            console.error("Failed to track visit:", error);
+          }
+        }
+        trackVisit();
+      }, []);
 
   return (
     <Box
@@ -129,139 +145,122 @@ export default function Dashboard() {
       "&::-webkit-scrollbar-track": { backgroundColor: "transparent" },
     }}
   >
-        <Grid container spacing={3} sx={{marginTop:"10px"}}>
-          {filteredProducts.length === 0 ? (
-            <Typography
-              variant="h6"
-              sx={{
-                color: darkMode ? "#fff" : "#000",
-                textAlign: "center",
-                width: "100%",
-                marginTop: "20px",
-              }}
-            >
+        <Grid container spacing={3} sx={{ marginTop: "10px", display: "flex", justifyContent: "center", paddingLeft:"16px" }}>
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : filteredProducts.length === 0 ? (
+            <Typography variant="h6" sx={{ color: darkMode ? "#fff" : "#000", textAlign: "center", width: "100%", marginTop: "20px" }}>
               No products found.
             </Typography>
           ) : (
-            filteredProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    backgroundColor: darkMode ? "#1E293B" : "#fff",
-                    color: darkMode ? "#fff" : "#000",
-                    padding: "12px",
-                    borderRadius: "16px",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.03)",
-                      boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
-                    },
-                  }}
-                >
-                  {/* Circular Image */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={product.image}
-                      alt={product.name}
-                      sx={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        border: "2px solid #ccc",
-                        padding: "5px",
-                      }}
-                    />
-                    <Box>
-                      <Typography variant="h6">{product.name}</Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: darkMode ? "gray" : "text.secondary",
-                        }}
-                      >
-                        {product.category}
-                      </Typography>
-                      {/* Price Details */}
-                      <Typography variant="body2" sx={{ marginTop: "4px" }}>
-                        <s>{`$${Number(product.price.replace("$", "")) + 5}`}</s>{" "}
-                        <strong>{product.price}</strong>
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {product.currency}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  {/* Input for Custom Price & Buttons */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginTop: "12px",
-                    }}
-                  >
-                    <TextField
-  type="number"
-  value={customPrices[product.id] || product.price.replace("$", "")}
-  onChange={(e) => {
-    const enteredPrice = Number(e.target.value);
-    const basePrice = Number(product.price.replace("$", ""));
-
-    // Prevent price lower than base price
-    if (enteredPrice < basePrice) {
-      toast.error(`Price cannot be less than ${product.price}`);
-      return;
-    }
-
-    handleCustomPriceChange(product.id, enteredPrice);
-  }}
-  size="small"
-  sx={{
-    width: "100px", // Same width as buttons
-    height: "40px", // Same height as buttons
-    "& input": {
-      padding: "8px",
-      textAlign: "center",
-      fontWeight: "bold",
-    },
-    "& fieldset": {
-      borderRadius: "8px", // Rounded corners to match buttons
-    },
-  }}
-/>
-
-                    <Box sx={{ display: "flex", gap: "8px" }}>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        onClick={() => handleAddToCart(product)}
-                        sx={{ minWidth: "40px" }}
-                      >
-                        <ShoppingCart size={16} />
-                      </Button>
-                      <Button
-                variant="outlined"
-                size="small"
-                onClick={() => handleOpenDrawer(product)}
-                sx={{ minWidth: "40px" }}
-              >
-                <Info size={16} />
-              </Button>
-                    </Box>
-                  </Box>
-                </Card>
-              </Grid>
-            ))
+            <Grid container spacing={3} sx={{ marginTop: "10px" }}>
+              {filteredProducts.map((product) => (
+               <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+               <Card
+                 sx={{
+                   height: "100%",
+                   backgroundColor: darkMode ? "#1E293B" : "#fff",
+                   color: darkMode ? "#fff" : "#000",
+                   padding: "12px",
+                   borderRadius: "16px",
+                   transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                   "&:hover": {
+                     transform: "scale(1.03)",
+                     boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
+                   },
+                 }}
+               >
+                 {/* ✅ Image & Label Row */}
+                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                   {/* Circular Image */}
+                   <CardMedia
+                     component="img"
+                     image={product.image}
+                     alt={product.name}
+                     sx={{
+                       width: "80px",
+                       height: "80px",
+                       borderRadius: "50%",
+                       objectFit: "cover",
+                       border: "2px solid #ccc",
+                       padding: "5px",
+                     }}
+                   />
+             
+                   {/* ✅ Billing Cycle Label (Aligned Right) */}
+                   <Typography
+                     sx={{
+                       backgroundColor: product.billingCycle === "Monthly" ? "#3B82F6" : "#2563EB",
+                       color: "#fff",
+                       fontSize: "12px",
+                       fontWeight: "bold",
+                       padding: "4px 10px",
+                       borderRadius: "12px",
+                    //    textTransform: "uppercase",
+                       display: "inline-block",
+                     }}
+                   >
+                     {product.billingCycle}
+                   </Typography>
+                 </Box>
+             
+                 {/* ✅ Product Details */}
+                 <Box>
+                   <Typography variant="h6">{product.name}</Typography>
+                   <Typography variant="body2" sx={{ color: darkMode ? "gray" : "text.secondary" }}>
+                     {product.category}
+                   </Typography>
+                   <Typography variant="body2" sx={{ marginTop: "4px" }}>
+                     <s>{`$${Number(product.price.replace("$", "")) + 5}`}</s>{" "}
+                     <strong>{product.price}</strong>
+                   </Typography>
+                   <Typography variant="body2" color="text.secondary">
+                     {product.currency}
+                   </Typography>
+                 </Box>
+             
+                 {/* ✅ Input for Custom Price & Buttons */}
+                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "12px" }}>
+                   <TextField
+                     type="number"
+                     value={customPrices[product.id] || product.price.replace("$", "")}
+                     onChange={(e) => handleCustomPriceChange(product.id, e.target.value)}
+                     size="small"
+                     sx={{
+                       width: "100px",
+                       height: "40px",
+                       "& input": { padding: "8px", textAlign: "center", fontWeight: "bold" },
+                       "& fieldset": { borderRadius: "8px" },
+                     }}
+                   />
+             
+                   {/* ✅ Cart & View Details Buttons */}
+                   <Box sx={{ display: "flex", gap: "8px" }}>
+                     <Button
+                       variant="contained"
+                       size="small"
+                       onClick={() => handleAddToCart(product)}
+                       sx={{ minWidth: "40px" }}
+                     >
+                       <ShoppingCart size={16} />
+                     </Button>
+                     <Button
+                       variant="outlined"
+                       size="small"
+                       onClick={() => handleOpenDrawer(product)}
+                       sx={{ minWidth: "40px" }}
+                     >
+                       <Info size={16} />
+                     </Button>
+                   </Box>
+                 </Box>
+               </Card>
+             </Grid>
+             
+              ))}
+            </Grid>
           )}
         </Grid>
       </Box>

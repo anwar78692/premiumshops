@@ -27,11 +27,12 @@ model UserFilter {
 }
 model Product {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
+  name       String @unique
   category   String
   price      String
   currency   String
   image      String
+  billingCycle String?
   features   Feature[]
 }
 
@@ -52,4 +53,11 @@ model Cart {
   currency  String
   image     String
   quantity  Int     // Quantity of product in cart
+}
+
+model Visit {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  ipAddress String
+  userAgent String?
+  visitedAt DateTime @default(now())
 }

@@ -11,48 +11,60 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { CheckCircle, Star, ShoppingCart, Tag, Calendar, Rocket } from "lucide-react";
+import { CheckCircle, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ProductDrawer({ open, productId, onClose }) {
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    async function fetchProductDetails() {
-      if (!productId) return;
+    if (!productId || !open) return;
 
+    setProduct(null); // ✅ Reset previous product data
+    setLoading(true);
+
+    async function fetchProductDetails() {
       try {
         const res = await fetch(`/api/productsdetails/${productId}`);
-        const data = await res.json();
-        if (!data.error) {
-          setProduct(data);
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
         }
+
+        const data = await res.json();
+        console.log("Fetched product details:", data);
+
+        setProduct(data);
       } catch (error) {
         console.error("Error fetching product details:", error);
+        setProduct(null);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchProductDetails();
-  }, [productId]);
-  const handleAddToCart =async (productCart) => {
+  }, [productId, open]);
+
+  const handleAddToCart = async (productCart) => {
     addToCart(productCart);
     toast.success(`${productCart.name} added to cart! 🛒`, {
-        position: "top-right",
-        duration: 3000,
-        style: {
-          borderRadius: "10px",
-          background: "#1E293B",
-          color: "#fff",
-        },
-      });
+      position: "top-right",
+      duration: 3000,
+      style: {
+        borderRadius: "10px",
+        background: "#1E293B",
+        color: "#fff",
+      },
+    });
     onClose();
-  }
-
-  if (!product) return null;
+  };
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -64,55 +76,76 @@ export default function ProductDrawer({ open, productId, onClose }) {
             <Close />
           </IconButton>
         </Box>
-        <Divider sx={{ marginY: 2 }} />
+        <Divider sx={{ marginY: 1 }} />
 
-        {/* Product Image */}
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-          <img
-            src={product.image}
-            alt={product.name}
-            style={{ width: "100%", height: "auto", borderRadius: "10px" }}
-          />
-        </Box>
+        {/* ✅ Show Loader if Loading */}
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+            <CircularProgress />
+          </Box>
+        ) : product ? (
+          <>
+            {/* ✅ Small Product Image */}
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <img
+                src={product.image}
+                alt={product.name}
+                style={{ width: "120px", height: "120px", borderRadius: "10px", objectFit: "contain" }}
+              />
+            </Box>
 
-        {/* Product Name & Category */}
-        <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold" }}>
-          {product.name}
-        </Typography>
-        <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
-          {product.category}
-        </Typography>
+            {/* ✅ Product Name & Category */}
+            <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold" }}>
+              {product.name}
+            </Typography>
+            <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
+              {product.category}
+            </Typography>
 
-        {/* Features List (Fetched from DB) */}
-        <List>
-          {product.features?.map((feature, index) => (
-            <ListItem key={index}>
-              <ListItemIcon>
-                <CheckCircle size={20} color="green" />
-              </ListItemIcon>
-              <ListItemText primary={feature.description} />
-            </ListItem>
-          ))}
-        </List>
+            <Divider sx={{ marginY: 1 }} />
 
-        <Divider sx={{ marginY: 2 }} />
+            {/* ✅ Features List (Reduced Spacing) */}
+            <List sx={{ paddingY: 0 }}>
+              {product.features?.length > 0 ? (
+                product.features.map((feature, index) => (
+                  <ListItem key={index} sx={{ paddingY: "2px" }}> {/* Reduced Padding */}
+                    <ListItemIcon sx={{ minWidth: "30px" }}>
+                      <CheckCircle size={18} color="green" />
+                    </ListItemIcon>
+                    <ListItemText primary={feature.description} sx={{ fontSize: "14px" }} />
+                  </ListItem>
+                ))
+              ) : (
+                <Typography variant="body2" sx={{ textAlign: "center", color: "gray", mt: 1 }}>
+                  No features available.
+                </Typography>
+              )}
+            </List>
 
-        {/* Price & Add to Cart Button */}
-        <Box sx={{ textAlign: "center", mt: "auto" }}>
-          <Typography variant="h6">
-            {product.price} | {product.currency}
+            <Divider sx={{ marginY: 1 }} />
+
+            {/* ✅ Price & Add to Cart Button */}
+            <Box sx={{ textAlign: "center", mt: "auto" }}>
+              <Typography variant="h6">
+                {product.price} | {product.currency}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                startIcon={<ShoppingCart />}
+                onClick={() => handleAddToCart(product)}
+                sx={{ mt: 1 }}
+              >
+                Add to Cart
+              </Button>
+            </Box>
+          </>
+        ) : (
+          <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
+            Product not found.
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            startIcon={<ShoppingCart />}
-            onClick={() => handleAddToCart(product)}
-            sx={{ mt: 2 }}
-          >
-            Add to Cart
-          </Button>
-        </Box>
+        )}
       </Box>
       <Toaster position="top-center" />
     </Drawer>
