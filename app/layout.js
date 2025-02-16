@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={montserrat.variable}>
-      <body  className="font-montserrat">
+      <body  className="font-montserrat ">
       <ThemeProviderWrapper>
           <SearchProvider>
 

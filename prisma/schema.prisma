@@ -61,3 +61,11 @@ model Visit {
   userAgent String?
   visitedAt DateTime @default(now())
 }
+
+model Order {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userEmail     String
+  paymentId     String
+  products      Json
+  createdAt     DateTime @default(now())
+}

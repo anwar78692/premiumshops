@@ -170,13 +170,15 @@ export default function Dashboard() {
                         display: "flex",
                         justifyContent: "center",
                         backgroundColor: darkMode ? "#0D1117" : "#fff",
+                        // paddingLeft:"24px",
+                        // paddingRight:"24px",
                     }}
                 >
                     <SearchBar />
                 </Box>
             </Box>
 
-            <Box sx={{ paddingY: 2, backgroundColor: darkMode ? "#161B22" : "#fff" }}>
+            <Box sx={{ paddingY: 2, paddingX:3.2, backgroundColor: darkMode ? "#161B22" : "#fff" }}>
                 <FilterComponent />
             </Box>
 
@@ -184,7 +186,7 @@ export default function Dashboard() {
                 sx={{
                     flexGrow: 1,
                     overflowY: "auto",
-                    paddingX: 4,
+                    paddingX: 3.2,
                     paddingBottom: "40px",
                     scrollbarWidth: "thin",
                     scrollbarColor: "lightgray transparent",

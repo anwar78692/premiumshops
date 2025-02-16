@@ -10,7 +10,7 @@ export default function SearchBar() {
 
   return (
     <div
-      className={`w-full flex justify-center pb-6 items-center px-5  ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
+      className={`w-full px-6 flex justify-center pb-6 items-center  ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
     >
      <TextField
         variant="outlined"

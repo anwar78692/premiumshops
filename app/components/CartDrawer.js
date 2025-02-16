@@ -136,6 +136,41 @@ export default function CartDrawer({ open, onClose }) {
     setLoading(false);
   };
 
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+  
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems, email: "algoexpert52@gmail.com" }), 
+      });
+  
+      // ✅ Read response once and store it
+      const data = await res.json();  
+      console.log("Checkout Response:", data);
+  
+      if (!res.ok) {
+        console.error("Checkout Error Response:", data);
+        toast.error(data.error || "Checkout failed!");
+        return;
+      }
+  
+      if (data.url) {
+        window.location.href = data.url; 
+      } else {
+        toast.error("Failed to start checkout!");
+      }
+    } catch (error) {
+      console.error("Checkout Error:", error);
+      toast.error("Error during checkout.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box
@@ -250,8 +285,8 @@ export default function CartDrawer({ open, onClose }) {
             <Typography variant="h6" sx={{ textAlign: "center", marginBottom: "10px" }}>
               Total: ${totalPriceUSD} | ₹{totalPriceINR}
             </Typography>
-            <Button fullWidth variant="contained" onClick={handleUPICheckout} sx={{ marginBottom: "10px" }}>
-              Pay via UPI (₹)
+            <Button fullWidth variant="contained" onClick={handleCheckout} sx={{ marginBottom: "10px" }}>
+              Pay via Stripe
             </Button>
             <Button fullWidth variant="contained" color="secondary" onClick={handleCryptoCheckout}>
               Pay via Crypto ($)
