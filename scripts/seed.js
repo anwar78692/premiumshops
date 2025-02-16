@@ -54,9 +54,13 @@ async function main() {
     { name: "Microsoft Office 365", category: "Professional", price: "$20", currency: "₹1899", image: "/products/microsoft.png", billingCycle: "Yearly" },
     { name: "SonyLiv Premium", category: "Entertainment", price: "$5", currency: "₹399", image: "/products/sony.png", billingCycle: "Yearly" },
     { name: "PCLOUD", category: "Utilities", price: "$30", currency: "₹2800", image: "/products/pcloud.png", billingCycle: "Yearly" },
-    { name: "Tinder Gold", category: "Dating", price: "$50", currency: "₹5000", image: "/products/tinder.png", billingCycle: "Yearly" },
+    { name: "Tinder Gold", category: "Dating", price: "$35", currency: "₹3400", image: "/products/gold.png", billingCycle: "Yearly" },
     { name: "Quilbot Premium", category: "Utilities", price: "$20", currency: "₹1800", image: "/products/quilbot.png", billingCycle: "Yearly" },
-    { name: "Tinder Platinum", category: "Dating", price: "$35", currency: "₹3400", image: "/products/gold.png", billingCycle: "Yearly" },
+    { name: "Tinder Platinum", category: "Dating", price: "$50", currency: "₹5000", image: "/products/tinder.png", billingCycle: "Yearly" },
+    { name: "Educative Premium", category: "Learning", price: "$80", currency: "₹7000", image: "/products/educative.png", billingCycle: "Yearly" },
+    { name: "Leetcode Premium", category: "Learning", price: "$80", currency: "₹7000", image: "/products/leetcode.png", billingCycle: "Yearly" },
+    { name: "Codeacademy Pro", category: "Learning", price: "$7", currency: "₹600", image: "/products/codeacademy.png", billingCycle: "Monthly" },
+    { name: "You.com", category: "AI", price: "$15", currency: "₹1400", image: "/products/you.png", billingCycle: "Yearly" },
   ];
 
   // ✅ Features for Each Product (Now Unique!)
@@ -321,13 +325,34 @@ async function main() {
     { productName: "Tinder Gold", description: "All Plans Available" },
     { productName: "Tinder Gold", description: "Activating on your Account" },
     { productName: "Tinder Gold", description: "Guarantee- Till Plan's Validity" },
-    
+
     { productName: "Quilbot Premium", description: "Advanced grammar and style checks" },
     { productName: "Quilbot Premium", description: "Plagiarism detection" },
     { productName: "Quilbot Premium", description: "Vocabulary enhancement suggestions" },
     { productName: "Quilbot Premium", description: "Integration with multiple platforms" },
 
-
+    { productName: "Educative Premium", description: "Interactive coding challenges" },
+    { productName: "Educative Premium", description: "Hands-on learning with real-world projects" },
+    { productName: "Educative Premium", description: "Unlimited access to 500+ courses" },
+    { productName: "Educative Premium", description: "Access to coding interview preparation paths" },
+  
+    // 📌 Leetcode Premium
+    { productName: "Leetcode Premium", description: "Exclusive access to premium coding questions" },
+    { productName: "Leetcode Premium", description: "In-depth solutions with step-by-step explanations" },
+    { productName: "Leetcode Premium", description: "Real company interview questions" },
+    { productName: "Leetcode Premium", description: "Mock interviews and contest problems" },
+  
+    // 📌 Codeacademy Pro
+    { productName: "Codeacademy Pro", description: "Interactive coding lessons in multiple languages" },
+    { productName: "Codeacademy Pro", description: "Personalized learning paths" },
+    { productName: "Codeacademy Pro", description: "Project-based learning approach" },
+    { productName: "Codeacademy Pro", description: "Certificates upon course completion" },
+  
+    // 📌 You.com
+    { productName: "You.com", description: "Ad-free AI search experience" },
+    { productName: "You.com", description: "AI-powered writing assistant" },
+    { productName: "You.com", description: "Enhanced privacy with zero tracking" },
+    { productName: "You.com", description: "Customizable AI models for better search results" }
   ];
 
   // ✅ Insert Products into Database (Upsert to Avoid Duplicates)

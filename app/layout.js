@@ -7,8 +7,6 @@ import { Montserrat } from "next/font/google";
 import FilterProvider from "./context/FilterContext";
 import CartProvider from "./context/CartContext";
 
-const geistSans = Geist({ subsets: ["latin"] });
-const geistMono = Geist_Mono({ subsets: ["latin"] });
 const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"], // Choose the required weights
