@@ -17,12 +17,14 @@ import {
 import { Close } from "@mui/icons-material";
 import { CheckCircle, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useTheme } from "../context/ThemeContext"; // ✅ Import Theme Context
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ProductDrawer({ open, productId, onClose }) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const { addToCart } = useCart();
+  const { darkMode } = useTheme(); // ✅ Use Theme Context
   const isMobile = useMediaQuery("(max-width: 600px)"); // ✅ Detects mobile screens
 
   useEffect(() => {
@@ -61,8 +63,8 @@ export default function ProductDrawer({ open, productId, onClose }) {
       duration: 3000,
       style: {
         borderRadius: "10px",
-        background: "#1E293B",
-        color: "#fff",
+        background: darkMode ? "#1E293B" : "#fff",
+        color: darkMode ? "#fff" : "#000",
       },
     });
     onClose();
@@ -77,8 +79,8 @@ export default function ProductDrawer({ open, productId, onClose }) {
           display: "flex",
           flexDirection: "column",
           height: "100vh",
-          backgroundColor: "#1E1E1E",
-          color: "#fff",
+          backgroundColor: darkMode ? "#1E1E1E" : "#fff",
+          color: darkMode ? "#fff" : "#000",
           overflowY: "auto", // ✅ Enables scrolling
           scrollbarWidth: "thin",
         }}
@@ -86,11 +88,11 @@ export default function ProductDrawer({ open, productId, onClose }) {
         {/* ✅ Header Section */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="h6" sx={{ fontSize: isMobile ? "16px" : "18px" }}>Product Details</Typography>
-          <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+          <IconButton onClick={onClose} sx={{ color: darkMode ? "#fff" : "#000" }}>
             <Close />
           </IconButton>
         </Box>
-        <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
+        <Divider sx={{ marginY: 1, backgroundColor: darkMode ? "#444" : "#ddd" }} />
 
         {/* ✅ Show Loader if Loading */}
         {loading ? (
@@ -110,6 +112,7 @@ export default function ProductDrawer({ open, productId, onClose }) {
                   height: "auto",
                   borderRadius: "12px",
                   objectFit: "contain",
+                  boxShadow: darkMode ? "0px 4px 8px rgba(255,255,255,0.1)" : "0px 4px 8px rgba(0,0,0,0.1)"
                 }}
               />
             </Box>
@@ -118,11 +121,11 @@ export default function ProductDrawer({ open, productId, onClose }) {
             <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", fontSize: isMobile ? "18px" : "20px" }}>
               {product.name}
             </Typography>
-            <Typography variant="body2" sx={{ textAlign: "center", color: "gray", fontSize: isMobile ? "14px" : "16px" }}>
+            <Typography variant="body2" sx={{ textAlign: "center", color: darkMode ? "gray" : "#555", fontSize: isMobile ? "14px" : "16px" }}>
               {product.category}
             </Typography>
 
-            <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
+            <Divider sx={{ marginY: 1, backgroundColor: darkMode ? "#444" : "#ddd" }} />
 
             {/* ✅ Features List */}
             <List sx={{ paddingY: 0 }}>
@@ -132,37 +135,41 @@ export default function ProductDrawer({ open, productId, onClose }) {
                     <ListItemIcon sx={{ minWidth: "30px" }}>
                       <CheckCircle size={18} color="green" />
                     </ListItemIcon>
-                    <ListItemText primary={feature.description} sx={{ fontSize: "14px", color: "#fff" }} />
+                    <ListItemText primary={feature.description} sx={{ fontSize: "14px", color: darkMode ? "#fff" : "#000" }} />
                   </ListItem>
                 ))
               ) : (
-                <Typography variant="body2" sx={{ textAlign: "center", color: "gray", mt: 1 }}>
+                <Typography variant="body2" sx={{ textAlign: "center", color: darkMode ? "gray" : "#777", mt: 1 }}>
                   No features available.
                 </Typography>
               )}
             </List>
 
-            <Divider sx={{ marginY: 1, backgroundColor: "#444" }} />
+            <Divider sx={{ marginY: 1, backgroundColor: darkMode ? "#444" : "#ddd" }} />
 
             {/* ✅ Price & Add to Cart Button */}
             <Box sx={{ textAlign: "center", mt: "auto" }}>
-              <Typography variant="h6" sx={{ fontSize: isMobile ? "16px" : "18px" }}>
+              <Typography variant="h6" sx={{ fontSize: isMobile ? "16px" : "18px", color: darkMode ? "#38BDF8" : "#2563EB" }}>
                 {product.price} | {product.currency}
               </Typography>
               <Button
                 variant="contained"
-                color="primary"
                 fullWidth
                 startIcon={<ShoppingCart />}
                 onClick={() => handleAddToCart(product)}
-                sx={{ mt: 1, fontSize: isMobile ? "14px" : "16px" }} // ✅ Adjust button text size
+                sx={{
+                  mt: 1,
+                  fontSize: isMobile ? "14px" : "16px",
+                  backgroundColor: darkMode ? "#3B82F6" : "#2563EB",
+                  "&:hover": { backgroundColor: darkMode ? "#2563EB" : "#1D4ED8" },
+                }} 
               >
                 Add to Cart
               </Button>
             </Box>
           </>
         ) : (
-          <Typography variant="body2" sx={{ textAlign: "center", color: "gray" }}>
+          <Typography variant="body2" sx={{ textAlign: "center", color: darkMode ? "gray" : "#777" }}>
             Product not found.
           </Typography>
         )}

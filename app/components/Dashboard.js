@@ -12,6 +12,8 @@ import {
     CircularProgress,
     Chip,
     Tooltip,
+    Avatar,
+    IconButton,
 } from "@mui/material";
 import Header from "./Header";
 import { useTheme } from "../context/ThemeContext";
@@ -206,128 +208,185 @@ export default function Dashboard() {
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
                                     <Card
                                         sx={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "space-between",
-                                            height: "100%",
-                                            backgroundColor: darkMode ? "#1E293B" : "#fff",
-                                            color: darkMode ? "#fff" : "#333",
-                                            padding: "16px",
-                                            borderRadius: "16px",
-                                            border: darkMode ? "1px solid #374151" : "1px solid rgba(0, 0, 0, 0.1)",
-                                            boxShadow: darkMode
-                                                ? "0px 4px 10px rgba(0, 0, 0, 0.3)"
-                                                : "0px 10px 25px rgba(0, 0, 0, 0.1)",
-                                            transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                                            "&:hover": {
-                                                transform: "scale(1.05)",
-                                                boxShadow: darkMode
-                                                    ? "0px 10px 30px rgba(0, 0, 0, 0.4)"
-                                                    : "0px 15px 35px rgba(0, 0, 0, 0.15)",
-                                            },
                                             position: "relative",
+                                            height: "250px", // ✅ Reduced Height
+                                            width: "100%",
+                                            maxWidth: "350px", // ✅ Slightly Compact Width
+                                            borderRadius: "16px",
+                                            overflow: "hidden",
+                                            background: darkMode
+                                                ? "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)"
+                                                : "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+                                            transition: "all 0.3s ease",
+                                            boxShadow: darkMode
+                                                ? "0 5px 20px rgba(0, 0, 0, 0.4)"
+                                                : "0 5px 20px rgba(0, 0, 0, 0.1)",
+                                            "&:hover": {
+                                                transform: "scale(1.03)",
+                                                boxShadow: darkMode
+                                                    ? "0 10px 30px rgba(0, 0, 0, 0.5)"
+                                                    : "0 10px 30px rgba(0, 0, 0, 0.15)",
+                                            },
                                         }}
                                     >
-                                        {/* Billing Cycle Badge */}
+                                        {/* Circular Background Accent */}
                                         <Box
                                             sx={{
                                                 position: "absolute",
-                                                top: "12px",
-                                                right: "12px",
-                                                backgroundColor:
-                                                    product.billingCycle === "Monthly" ? "#3B82F6" : "#2563EB",
-                                                color: "#fff",
-                                                fontSize: "12px",
-                                                fontWeight: "bold",
-                                                padding: "4px 10px",
-                                                borderRadius: "12px",
-                                                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                                                top: "-40px",
+                                                left: "-40px",
+                                                width: "160px",
+                                                height: "160px",
+                                                borderRadius: "50%",
+                                                background: darkMode
+                                                    ? "radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(59,130,246,0) 70%)"
+                                                    : "radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(59,130,246,0) 70%)",
+                                                zIndex: 0,
+                                            }}
+                                        />
+
+                                        {/* Content Wrapper */}
+                                        <Box
+                                            sx={{
+                                                position: "relative",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                height: "100%",
+                                                padding: "12px",
+                                                zIndex: 1,
                                             }}
                                         >
-                                            {product.billingCycle}
-                                        </Box>
+                                            {/* Top Section */}
+                                            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                <Typography
+                                                    variant="h6"
+                                                    sx={{
+                                                        fontWeight: 700,
+                                                        fontSize: "1rem", // ✅ Slightly Smaller Font
+                                                        color: darkMode ? "#fff" : "#333",
+                                                    }}
+                                                >
+                                                    {product.name}
+                                                </Typography>
+                                                <Chip
+                                                    label={product.billingCycle}
+                                                    size="small"
+                                                    sx={{
+                                                        backgroundColor: product.billingCycle === "Monthly" ? "#3B82F6" : "#2563EB",
+                                                        color: "#fff",
+                                                        fontWeight: 600,
+                                                        borderRadius: "8px",
+                                                    }}
+                                                />
+                                            </Box>
 
-                                        {/* Product Image */}
-                                        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                                            <CardMedia
-                                                component="img"
-                                                image={product.image}
-                                                alt={product.name}
-                                                sx={{
-                                                    width: "90px",
-                                                    height: "90px",
-                                                    borderRadius: "50%",
-                                                    objectFit: "cover",
-                                                    border: "3px solid rgba(255, 255, 255, 0.3)",
-                                                    padding: "5px",
-                                                    boxShadow: darkMode
-                                                        ? "none"
-                                                        : "0px 5px 15px rgba(0, 0, 0, 0.15)",
-                                                }}
-                                            />
-                                        </Box>
+                                            {/* Main Content */}
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+                                                {/* ✅ Product Image Inside a Circle */}
+                                                <Box
+                                                    sx={{
+                                                        width: "100px",  // Set a fixed size for the image container
+                                                        height: "100px", // Set a fixed size for the image container
+                                                        borderRadius: "50%",  // This ensures the image is in a circle
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        backgroundColor: "#F5F5F5",  // Optional background color for the circle
+                                                        border: "3px solid #ddd", // Optional border around the circle
+                                                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Optional shadow for better visibility
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={product.image} // Image source from product or static file
+                                                        alt={product.name}  // Image alt text
+                                                        style={{
+                                                            width: "90px",  // Width of the image inside the circle
+                                                            height: "90px", // Height of the image inside the circle
+                                                            borderRadius: "50%", // This ensures the image itself is in a circle
+                                                            objectFit: "cover",  // Ensures the image fills the circle without distortion
+                                                        }}
+                                                    />
+                                                </Box>
 
-                                        {/* Product Details */}
-                                        <Box sx={{ textAlign: "center" }}>
-                                            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                                {product.name}
-                                            </Typography>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: darkMode ? "gray" : "#555", mb: 1 }}
-                                            >
-                                                {product.category}
-                                            </Typography>
 
-                                            {/* Pricing */}
-                                            <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                                                <s style={{ opacity: 0.6, fontSize: "14px", marginRight: "6px" }}>
-                                                    {`$${Number(product.price.replace("$", "")) + 10}`} {/* Original Price */}
-                                                </s>
-                                                <strong style={{ fontSize: "18px", color: darkMode ? "#fff" : "#000" }}>
-                                                    {product.price}
-                                                </strong>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                {product.currency}
-                                            </Typography>
-                                        </Box>
+                                                {/* Product Details */}
+                                                <Box sx={{ flex: 1 }}>
+                                                    <Typography
+                                                        variant="body2"
+                                                        sx={{
+                                                            color: darkMode ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)",
+                                                            mb: 0.5, // ✅ Reduced Spacing
+                                                        }}
+                                                    >
+                                                        {product.category}
+                                                    </Typography>
 
-                                        {/* Buttons */}
-                                        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                                            <Tooltip title="Add to Cart" placement="top" arrow>
+                                                    {/* Price Section with Strike-through Effect */}
+                                                    <Box sx={{ display: "flex", alignItems: "baseline", gap: 1 }}>
+                                                        <Typography
+                                                            sx={{
+                                                                fontSize: "1.3rem", // ✅ Adjusted Font Size
+                                                                fontWeight: 700,
+                                                                color: darkMode ? "#38BDF8" : "#0EA5E9",
+                                                            }}
+                                                        >
+                                                            {product.price}
+                                                        </Typography>
+                                                        <Typography
+                                                            sx={{
+                                                                textDecoration: "line-through",
+                                                                opacity: 0.6,
+                                                                fontSize: "0.9rem",
+                                                            }}
+                                                        >
+                                                            {`$${Number(product.price.replace("$", "")) + 10}`}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+
+                                            {/* Bottom Action Buttons */}
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 1 }}> {/* ✅ Reduced Space */}
+                                                {/* Add to Cart Button */}
                                                 <Button
                                                     variant="contained"
-                                                    size="small"
-                                                    onClick={handleAddToCart}
+                                                    fullWidth
+                                                    onClick={() => handleAddToCart(product)}
+                                                    startIcon={<ShoppingCart size={16} />}
                                                     sx={{
-                                                        minWidth: "40px",
-                                                        backgroundColor: darkMode ? "#2563EB" : "#1D4ED8",
-                                                        "&:hover": { backgroundColor: darkMode ? "#1E40AF" : "#2563EB" },
+                                                        backgroundColor: darkMode ? "#3B82F6" : "#2563EB",
+                                                        borderRadius: "10px",
+                                                        padding: "8px 12px", // ✅ Smaller Padding
+                                                        fontSize: "0.9rem",
+                                                        fontWeight: "bold",
+                                                        "&:hover": {
+                                                            backgroundColor: darkMode ? "#2563EB" : "#1D4ED8",
+                                                        },
                                                     }}
                                                 >
-                                                    <ShoppingCart size={18} />
+                                                    Add to Cart
                                                 </Button>
-                                            </Tooltip>
 
-                                            <Tooltip title="View Details" placement="top" arrow>
-                                                <Button
-                                                    variant="outlined"
-                                                    size="small"
-                                                    onClick={() => handleOpenDrawer(product)}
-                                                    sx={{
-                                                        minWidth: "40px",
-                                                        borderColor: darkMode ? "#2563EB" : "#1D4ED8",
-                                                        color: darkMode ? "#2563EB" : "#1D4ED8",
-                                                        "&:hover": { borderColor: darkMode ? "#1E40AF" : "#2563EB" },
-                                                    }}
-                                                >
-                                                    <Info size={18} />
-                                                </Button>
-                                            </Tooltip>
+                                                {/* View Details Button (Tooltip Fixed) */}
+                                                <Tooltip title="View Details" arrow placement="top">
+                                                    <IconButton
+                                                        onClick={() => handleOpenDrawer(product)}
+                                                        sx={{
+                                                            border: `1px solid ${darkMode ? "#3B82F6" : "#2563EB"}`,
+                                                            color: darkMode ? "#3B82F6" : "#2563EB",
+                                                            borderRadius: "10px",
+                                                            transition: "all 0.2s ease-in-out",
+                                                            "&:hover": {
+                                                                backgroundColor: "rgba(37, 99, 235, 0.1)",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <Info size={18} />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Box>
                                         </Box>
                                     </Card>
-
                                 </Grid>
                             ))}
                         </Grid>
