@@ -35,16 +35,16 @@ export default function Dashboard() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    
+
     const handleOpenDrawer = (product) => {
         setSelectedProduct(product);
         setIsDrawerOpen(true);
     };
-    
+
     const handleCloseDrawer = () => {
         setIsDrawerOpen(false);
     };
-    
+
     useEffect(() => {
         async function fetchProducts() {
             try {
@@ -60,11 +60,11 @@ export default function Dashboard() {
         }
         fetchProducts();
     }, []);
-    
+
     const handleAddToCart = (product) => {
         const price = customPrices[product.id] || product.price;
         addToCart({ ...product, price });
-    
+
         toast.custom((t) => (
             <div
                 className={`flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 
@@ -90,13 +90,13 @@ export default function Dashboard() {
                         padding: "3px",
                     }}
                 />
-    
+
                 {/* Product Info */}
                 <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: "bold", color: "#fff" }}>{product.name}</p>
                     <p style={{ fontSize: "12px", color: "#555" }}>Added to Cart</p>
                 </div>
-    
+
                 {/* Open Cart Button */}
                 <button
                     onClick={() => {
@@ -118,7 +118,7 @@ export default function Dashboard() {
             </div>
         ));
     };
-    
+
     // ✅ Updated Filtering Logic to Include Billing Cycle
     const filteredProducts = products
         .filter((item) =>
@@ -130,7 +130,7 @@ export default function Dashboard() {
         .filter((item) =>
             selectedBillingCycle === "All" ? true : item.billingCycle === selectedBillingCycle
         ); // ✅ Filter products by selected billing cycle
-    
+
     useEffect(() => {
         async function trackVisit() {
             try {
@@ -141,7 +141,7 @@ export default function Dashboard() {
         }
         trackVisit();
     }, []);
-    
+
 
     return (
         <Box
@@ -207,15 +207,14 @@ export default function Dashboard() {
                                     <Card
                                         sx={{
                                             display: "flex",
-                                            flexDirection: "column",  // Ensures consistent structure
-                                            justifyContent: "space-between",  // Pushes content to fill space
+                                            flexDirection: "column",
+                                            justifyContent: "space-between",
                                             height: "100%",
-                                            backgroundColor: darkMode ? "#1E293B" : "rgba(255, 255, 255, 0.6)",
+                                            backgroundColor: darkMode ? "#1E293B" : "#fff",
                                             color: darkMode ? "#fff" : "#333",
                                             padding: "16px",
-                                            borderRadius: "20px",
-                                            backdropFilter: darkMode ? "none" : "blur(10px)", // Blurry effect only in light mode
-                                            border: darkMode ? "1px solid #374151" : "1px solid rgba(255, 255, 255, 0.2)",
+                                            borderRadius: "16px",
+                                            border: darkMode ? "1px solid #374151" : "1px solid rgba(0, 0, 0, 0.1)",
                                             boxShadow: darkMode
                                                 ? "0px 4px 10px rgba(0, 0, 0, 0.3)"
                                                 : "0px 10px 25px rgba(0, 0, 0, 0.1)",
@@ -229,122 +228,103 @@ export default function Dashboard() {
                                             position: "relative",
                                         }}
                                     >
-                                        {/* Top Section - Product Details */}
-                                        <Box sx={{ flexGrow: 1 }}>
-                                            {/* Billing Cycle Badge - Top Right */}
-                                            <Box
-                                                sx={{
-                                                    position: "absolute",
-                                                    top: "12px",
-                                                    right: "12px",
-                                                    backgroundColor: product.billingCycle === "Monthly" ? "#3B82F6" : "#2563EB",
-                                                    color: "#fff",
-                                                    fontSize: "12px",
-                                                    fontWeight: "bold",
-                                                    padding: "6px 12px",
-                                                    borderRadius: "12px",
-                                                    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-                                                }}
-                                            >
-                                                {product.billingCycle}
-                                            </Box>
-
-                                            {/* Image & Details */}
-                                            <Box sx={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                                                {/* Product Image */}
-                                                <CardMedia
-                                                    component="img"
-                                                    image={product.image}
-                                                    alt={product.name}
-                                                    sx={{
-                                                        width: "90px",
-                                                        height: "90px",
-                                                        borderRadius: "50%",
-                                                        objectFit: "cover",
-                                                        border: "3px solid rgba(255, 255, 255, 0.3)",
-                                                        padding: "5px",
-                                                        boxShadow: darkMode ? "none" : "0px 5px 15px rgba(0, 0, 0, 0.15)",
-                                                    }}
-                                                />
-
-                                                {/* Product Name & Category */}
-                                                <Box>
-                                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                                        {product.name}
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: darkMode ? "gray" : "#555" }}>
-                                                        {product.category}
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ marginTop: "4px" }}>
-                                                        <s style={{ opacity: 0.7 }}>{`$${Number(product.price.replace("$", "")) + 5}`}</s>{" "}
-                                                        <strong style={{ fontSize: "18px", color: darkMode ? "#fff" : "#000" }}>{product.price}</strong>
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {product.currency}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
+                                        {/* Billing Cycle Badge */}
+                                        <Box
+                                            sx={{
+                                                position: "absolute",
+                                                top: "12px",
+                                                right: "12px",
+                                                backgroundColor:
+                                                    product.billingCycle === "Monthly" ? "#3B82F6" : "#2563EB",
+                                                color: "#fff",
+                                                fontSize: "12px",
+                                                fontWeight: "bold",
+                                                padding: "4px 10px",
+                                                borderRadius: "12px",
+                                                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                                            }}
+                                        >
+                                            {product.billingCycle}
                                         </Box>
 
-                                        {/* Bottom Section - Price Input & Buttons */}
-                                        <Box sx={{ marginTop: "auto" }}> {/* ✅ Pushes buttons to bottom */}
-                                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "12px" }}>
-                                                <TextField
-                                                    type="number"
-                                                    value={customPrices[product.id] || product.price.replace("$", "")}
+                                        {/* Product Image */}
+                                        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                                            <CardMedia
+                                                component="img"
+                                                image={product.image}
+                                                alt={product.name}
+                                                sx={{
+                                                    width: "90px",
+                                                    height: "90px",
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                    border: "3px solid rgba(255, 255, 255, 0.3)",
+                                                    padding: "5px",
+                                                    boxShadow: darkMode
+                                                        ? "none"
+                                                        : "0px 5px 15px rgba(0, 0, 0, 0.15)",
+                                                }}
+                                            />
+                                        </Box>
+
+                                        {/* Product Details */}
+                                        <Box sx={{ textAlign: "center" }}>
+                                            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                                {product.name}
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                sx={{ color: darkMode ? "gray" : "#555", mb: 1 }}
+                                            >
+                                                {product.category}
+                                            </Typography>
+
+                                            {/* Pricing */}
+                                            <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                                                <s style={{ opacity: 0.6, fontSize: "14px", marginRight: "6px" }}>
+                                                    {`$${Number(product.price.replace("$", "")) + 10}`} {/* Original Price */}
+                                                </s>
+                                                <strong style={{ fontSize: "18px", color: darkMode ? "#fff" : "#000" }}>
+                                                    {product.price}
+                                                </strong>
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {product.currency}
+                                            </Typography>
+                                        </Box>
+
+                                        {/* Buttons */}
+                                        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                                            <Tooltip title="Add to Cart" placement="top" arrow>
+                                                <Button
+                                                    variant="contained"
                                                     size="small"
+                                                    onClick={handleAddToCart}
                                                     sx={{
-                                                        width: "70px",
-                                                        height: "30px",
-                                                        "& input": {
-                                                            padding: "8px",
-                                                            textAlign: "center",
-                                                            fontWeight: "bold",
-                                                            borderRadius: "8px",
-                                                        },
-                                                        "& fieldset": { borderRadius: "10px" },
-                                                        backgroundColor: darkMode ? "#374151" : "rgba(255, 255, 255, 0.6)",
-                                                        boxShadow: darkMode ? "none" : "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                                                        minWidth: "40px",
+                                                        backgroundColor: darkMode ? "#2563EB" : "#1D4ED8",
+                                                        "&:hover": { backgroundColor: darkMode ? "#1E40AF" : "#2563EB" },
                                                     }}
-                                                />
+                                                >
+                                                    <ShoppingCart size={18} />
+                                                </Button>
+                                            </Tooltip>
 
-                                                {/* Cart & View Details Buttons */}
-                                                <Box sx={{ display: "flex", gap: "10px" }}>
-                                                    {/* Add to Cart Button with Tooltip */}
-                                                    <Tooltip title="Add to Cart" placement="top" arrow>
-                                                        <Button
-                                                            variant="contained"
-                                                            size="small"
-                                                            onClick={() => handleAddToCart(product)}
-                                                            sx={{
-                                                                minWidth: "40px",
-                                                                backgroundColor: darkMode ? "#2563EB" : "#1D4ED8",
-                                                                "&:hover": { backgroundColor: darkMode ? "#1E40AF" : "#2563EB" },
-                                                            }}
-                                                        >
-                                                            <ShoppingCart size={18} />
-                                                        </Button>
-                                                    </Tooltip>
-
-                                                    {/* View Details Button with Tooltip */}
-                                                    <Tooltip title="View Details" placement="top" arrow>
-                                                        <Button
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onClick={() => handleOpenDrawer(product)}
-                                                            sx={{
-                                                                minWidth: "40px",
-                                                                borderColor: darkMode ? "#2563EB" : "#1D4ED8",
-                                                                color: darkMode ? "#2563EB" : "#1D4ED8",
-                                                                "&:hover": { borderColor: darkMode ? "#1E40AF" : "#2563EB" },
-                                                            }}
-                                                        >
-                                                            <Info size={18} />
-                                                        </Button>
-                                                    </Tooltip>
-                                                </Box>
-
-                                            </Box>
+                                            <Tooltip title="View Details" placement="top" arrow>
+                                                <Button
+                                                    variant="outlined"
+                                                    size="small"
+                                                    onClick={() => handleOpenDrawer(product)}
+                                                    sx={{
+                                                        minWidth: "40px",
+                                                        borderColor: darkMode ? "#2563EB" : "#1D4ED8",
+                                                        color: darkMode ? "#2563EB" : "#1D4ED8",
+                                                        "&:hover": { borderColor: darkMode ? "#1E40AF" : "#2563EB" },
+                                                    }}
+                                                >
+                                                    <Info size={18} />
+                                                </Button>
+                                            </Tooltip>
                                         </Box>
                                     </Card>
 
@@ -373,7 +353,6 @@ export default function Dashboard() {
             </Box>
             <Toaster position="top-center" />
             <ProductDrawer open={isDrawerOpen} productId={selectedProduct?.id} product={selectedProduct} onClose={handleCloseDrawer} />
-
         </Box>
     );
 }

@@ -49,9 +49,15 @@ async function main() {
     { name: "Datacamp", category: "Learning", price: "$16", currency: "₹1499", image: "/products/datacamp.png", billingCycle: "6 Months" },
     { name: "Zee5 Premium", category: "Entertainment", price: "$8", currency: "₹400", image: "/products/zee5.png", billingCycle: "Yearly" },
     { name: "JioHotstar Premium", category: "Entertainment", price: "$14", currency: "₹1199", image: "/products/hotstar.png", billingCycle: "Yearly" },
-
+    { name: "Trading View Premium", category: "Utilities", price: "$9", currency: "₹799", image: "/products/tradingview.png", billingCycle: "Monthly" },
+    { name: "SUN NXT ", category: "Entertainment", price: "$6", currency: "₹599", image: "/products/sunnxt.png", billingCycle: "Yearly" },
+    { name: "Microsoft Office 365", category: "Professional", price: "$20", currency: "₹1899", image: "/products/microsoft.png", billingCycle: "Yearly" },
+    { name: "SonyLiv Premium", category: "Entertainment", price: "$5", currency: "₹399", image: "/products/sony.png", billingCycle: "Yearly" },
+    { name: "PCLOUD", category: "Utilities", price: "$30", currency: "₹2800", image: "/products/pcloud.png", billingCycle: "Yearly" },
+    { name: "Tinder Gold", category: "Dating", price: "$50", currency: "₹5000", image: "/products/tinder.png", billingCycle: "Yearly" },
+    { name: "Quilbot Premium", category: "Utilities", price: "$20", currency: "₹1800", image: "/products/quilbot.png", billingCycle: "Yearly" },
+    { name: "Tinder Platinum", category: "Dating", price: "$35", currency: "₹3400", image: "/products/gold.png", billingCycle: "Yearly" },
   ];
-
 
   // ✅ Features for Each Product (Now Unique!)
   const features = [
@@ -60,30 +66,41 @@ async function main() {
     { productName: "LinkedIn Premium Business", description: "InMail messaging available" },
     { productName: "LinkedIn Premium Business", description: "See who viewed your profile" },
     { productName: "LinkedIn Premium Business", description: "Exclusive learning courses" },
+    { productName: "LinkedIn Premium Business", description: "Activating on your existing account" },
+    { productName: "LinkedIn Premium Business", description: "Full 6 month access" },
 
     // LinkedIn Premium Career
     { productName: "LinkedIn Premium Career", description: "Job application insights" },
     { productName: "LinkedIn Premium Career", description: "Resume builder and tips" },
     { productName: "LinkedIn Premium Career", description: "Access to LinkedIn Learning" },
     { productName: "LinkedIn Premium Career", description: "Profile optimization tools" },
+    { productName: "LinkedIn Premium Career", description: "Activating on your existing account" },
+    { productName: "LinkedIn Premium Career", description: "Full 1 year access" },
 
     // AlgoExpert
     { productName: "AlgoExpert", description: "Comprehensive coding interview prep" },
     { productName: "AlgoExpert", description: "100+ data structures and algorithms problems" },
     { productName: "AlgoExpert", description: "Mock coding interviews available" },
     { productName: "AlgoExpert", description: "Video solutions for all problems" },
+    { productName: "AlgoExpert", description: "Activating on your google/github account" },
+    { productName: "AlgoExpert", description: "All modules unlocked" },
+    { productName: "AlgoExpert", description: "Full 1 year access" },
 
     // Programming Expert
     { productName: "Programming Expert", description: "In-depth programming tutorials" },
     { productName: "Programming Expert", description: "Interactive coding challenges" },
     { productName: "Programming Expert", description: "Community support and forums" },
-    { productName: "Programming Expert", description: "Project-based learning" },
+    { productName: "Programming Expert", description: "Project-based learning" }, 
+    { productName: "Programming Expert", description: "Activating on your google/github account" },
+    { productName: "Programming Expert", description: "Full 1 year access" },
+
 
     // Blinkist
     { productName: "Blinkist", description: "Summaries of best-selling books" },
     { productName: "Blinkist", description: "Audio versions for on-the-go learning" },
     { productName: "Blinkist", description: "Personalized recommendations" },
     { productName: "Blinkist", description: "Offline access to content" },
+    { productName: "Blinkist", description: "Full private 1 month access" },
 
     // SmallPDF
     { productName: "SmallPDF", description: "Convert PDF to various formats" },
@@ -108,30 +125,38 @@ async function main() {
     { productName: "Coursera Plus", description: "Certificates for completed courses" },
     { productName: "Coursera Plus", description: "Specializations and professional certificates" },
     { productName: "Coursera Plus", description: "Guided projects for hands-on learning" },
+    { productName: "Coursera Plus", description: "Activating on your existing coursera account" },
+    { productName: "Coursera Plus", description: "Full 1 year access hassle free learning" },
 
     // ChatGPT Plus
     { productName: "ChatGPT Plus", description: "Faster AI responses" },
     { productName: "ChatGPT Plus", description: "Access to GPT-4 Turbo" },
     { productName: "ChatGPT Plus", description: "Priority access during peak times" },
     { productName: "ChatGPT Plus", description: "Better performance on complex queries" },
+    { productName: "ChatGPT Plus", description: "Full 1 month access" },
 
     // Claude AI
     { productName: "Claude AI", description: "Advanced natural language processing" },
     { productName: "Claude AI", description: "Contextual understanding" },
     { productName: "Claude AI", description: "Customizable AI responses" },
     { productName: "Claude AI", description: "Integration with various platforms" },
+    { productName: "Claude AI", description: "Full 1 month access" },
 
     // Perplexity AI
     { productName: "Perplexity AI", description: "AI-driven insights and analytics" },
     { productName: "Perplexity AI", description: "Real-time data analysis" },
     { productName: "Perplexity AI", description: "Predictive modeling" },
     { productName: "Perplexity AI", description: "Customizable dashboards" },
+    { productName: "Perplexity AI", description: "Full 1 year access" },
+    { productName: "Perplexity AI", description: "Activating on your existing account" },
 
     // Canva Pro
     { productName: "Canva Pro", description: "Access to premium design elements" },
     { productName: "Canva Pro", description: "Brand kit for consistent branding" },
     { productName: "Canva Pro", description: "Team collaboration features" },
     { productName: "Canva Pro", description: "Magic Resize for multiple formats" },
+    { productName: "Canva Pro", description: "Full 1 year access" },
+    { productName: "Canva Pro", description: "Activating on your existing account" },
 
     // Adobe Creative Cloud
     { productName: "Adobe Creative Cloud", description: "Access to Adobe's suite of creative tools" },
@@ -267,6 +292,41 @@ async function main() {
     { productName: "JioHotstar Premium", description: "Ad-free experience for premium content" },
     { productName: "JioHotstar Premium", description: "Exclusive Disney+ & Marvel content" },
     { productName: "JioHotstar Premium", description: "Supports UHD & Dolby Atmos sound" },
+    { productName: "JioHotstar Premium", description: "Full 1 year access & activating on your mobile number" },
+    
+    { productName: "Microsoft Office 365", description: "Activating on your account" },
+    { productName: "Microsoft Office 365", description: "Plan- MS 365 Personal" },
+    { productName: "Microsoft Office 365", description: "Renew Also Available" },
+    { productName: "Microsoft Office 365", description: "Private Subscription" },
+    { productName: "Microsoft Office 365", description: "Source- Legit & Safe AF" },
+    { productName: "Microsoft Office 365", description: "Guarantee- Till Plan's Validity" },
+
+    { productName: "SonyLiv Premium", description: "Guarantee- Till Plan Expiry" },
+    { productName: "SonyLiv Premium", description: "Activating on your Account" },
+
+    { productName: "PCLOUD", description: "Fast file sharing & downloads" },
+    { productName: "PCLOUD", description: "Collaboration tools included" },
+    { productName: "PCLOUD", description: "Plan-Premium 500GB" },
+    { productName: "PCLOUD", description: "Activating on your Account" },
+    { productName: "PCLOUD", description: "Guarantee- Till Plan's Validity" },
+
+    { productName: "Tinder Platinum", description: "No ads while swiping" },
+    { productName: "Tinder Platinum", description: "Enhanced privacy mode" },
+    { productName: "Tinder Platinum", description: "All Plans Available" },
+    { productName: "Tinder Platinum", description: "Activating on your Account" },
+    { productName: "Tinder Platinum", description: "Guarantee- Till Plan's Validity" },
+
+    { productName: "Tinder Gold", description: "No ads while swiping" },
+    { productName: "Tinder Gold", description: "Enhanced privacy mode" },
+    { productName: "Tinder Gold", description: "All Plans Available" },
+    { productName: "Tinder Gold", description: "Activating on your Account" },
+    { productName: "Tinder Gold", description: "Guarantee- Till Plan's Validity" },
+    
+    { productName: "Quilbot Premium", description: "Advanced grammar and style checks" },
+    { productName: "Quilbot Premium", description: "Plagiarism detection" },
+    { productName: "Quilbot Premium", description: "Vocabulary enhancement suggestions" },
+    { productName: "Quilbot Premium", description: "Integration with multiple platforms" },
+
 
   ];
 
