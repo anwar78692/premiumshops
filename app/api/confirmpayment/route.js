@@ -61,13 +61,13 @@ export async function POST(req) {
     let transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.EMAIL_USER, // Your email
-        pass: process.env.EMAIL_PASS, // Your email password (use app password if 2FA enabled)
+        user: process.env.NEXT_PUBLIC_EMAIL_USER, // Your email
+        pass: process.env.NEXT_PUBLIC_EMAIL_PASS, // Your email password (use app password if 2FA enabled)
       },
     });
 
     let mailOptions = {
-      from: `"Premium Shop" <${process.env.EMAIL_USER}>`,
+      from: `"Premium Shop" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`,
       to: session.customer_email,
       subject: "Your Purchase Confirmation - Premium Shop",
       html: `
